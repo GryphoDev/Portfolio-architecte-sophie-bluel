@@ -1,7 +1,11 @@
 import { loginUser } from "./api.js";
-import { displayProjects, allProjects } from "./script.js";
-// email: sophie.bluel@test.tld
-// password: S0phie
+import {
+  displayProjects,
+  allProjects,
+  createFilters,
+  clickFilter,
+} from "./script.js";
+
 const homePage = document.querySelector(".home-page");
 const loginPage = document.querySelector(".login-container");
 
@@ -44,6 +48,7 @@ async function fetchToken(email, password) {
     localStorage.setItem("authToken", token);
     homePage.classList.remove("hidden");
     loginPage.classList.add("hidden");
+    displayProjects(allProjects);
     editorPage();
   } else {
     alert("L'identifiant ou le mot de passe est incorrect");
@@ -57,18 +62,23 @@ export function editorPage() {
   document.getElementById("projects").style.marginBottom = "92px";
   const logOut = document.querySelector(".logInOut");
   logOut.innerHTML = "logout";
-  logOut.addEventListener("click", () => {
-    closeEditorPage();
-  });
+  if (!logOut.hasAttribute("data-logout-attached")) {
+    logOut.addEventListener("click", () => {
+      closeEditorPage();
+    });
+    logOut.setAttribute("data-logout-attached", "true");
+  }
 }
 
 function closeEditorPage() {
-  displayProjects(allProjects);
   localStorage.removeItem("authToken");
+  createFilters();
+  clickFilter();
   document.querySelector(".filter").classList.remove("hidden");
   document.querySelector(".loginHeader").classList.add("hidden");
   document.querySelector(".editionBtn").classList.add("hidden");
   document.getElementById("projects").style.marginBottom = "0px";
   const logOut = document.querySelector(".logInOut");
   logOut.innerHTML = "login";
+  logOut.removeAttribute("data-logout-attached");
 }

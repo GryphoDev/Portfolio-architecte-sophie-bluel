@@ -29,13 +29,15 @@ export function displayProjects(projectsSelected) {
 }
 
 // Function to create filter buttons for each category
-function createFilters() {
+export function createFilters() {
+  const filters = document.querySelector(".filter");
+  filters.innerHTML = "";
+
   const filterAll = document.createElement("button");
   filterAll.innerHTML = "Tous"; // "All" filter button
   filterAll.setAttribute("data-index", "all");
   filterAll.classList.add("button_active"); // Default active button
-  document.querySelector(".filter").appendChild(filterAll);
-
+  filters.appendChild(filterAll);
   allCategory.forEach((category) => {
     const filter = document.createElement("button");
     filter.innerHTML = category.name; // Set category name on button
@@ -45,7 +47,7 @@ function createFilters() {
 }
 
 // Function to handle filter button click events
-function clickFilter() {
+export function clickFilter() {
   const allButtons = document.querySelectorAll("nav button"); // Get all filter buttons
 
   allButtons.forEach((button) => {
@@ -64,7 +66,7 @@ function clickFilter() {
   });
 }
 // Function to manage button active state and disable the clicked button
-function buttonStatus(allButtons, button) {
+export function buttonStatus(allButtons, button) {
   allButtons.forEach((btn) => {
     btn.classList.remove("button_active"); // Remove active class from all buttons
     btn.disabled = false; // Enable all buttons
@@ -75,8 +77,13 @@ function buttonStatus(allButtons, button) {
 // function to check if user is login
 
 // Initial display of all projects and setup of filters
-displayProjects(allProjects);
-createFilters();
-clickFilter();
-login();
-modal();
+
+export async function init() {
+  login();
+  displayProjects(allProjects);
+  createFilters();
+  clickFilter();
+  modal();
+}
+
+init();
