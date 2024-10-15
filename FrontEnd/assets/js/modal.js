@@ -1,5 +1,5 @@
-import { fetchProjects, init } from "./script.js";
-import { callWorks, callCategory, postWork } from "./api.js";
+import { fetchProjects } from "./script.js";
+import { deleteProject, callCategory, postWork } from "./api.js";
 const editionBtn = document.querySelector(".editionBtn");
 const modalContainer = document.querySelector(".modal-container");
 const addBtn = document.querySelector(".modal-btn");
@@ -31,6 +31,7 @@ export function modal() {
 
 async function closeModal() {
   modalContainer.classList.add("hidden");
+  modal();
 }
 
 async function displayContent() {
@@ -55,6 +56,14 @@ async function displayContent() {
     container.appendChild(icon);
     content.appendChild(container);
   });
+  const trash = document.querySelectorAll(".fa-trash-can");
+  trash.forEach((trash) =>
+    trash.addEventListener("click", async (e) => {
+      const workId = e.target.dataset.index;
+      await deleteProject(workId);
+      displayContent();
+    })
+  );
 }
 
 async function displayAddWork() {
