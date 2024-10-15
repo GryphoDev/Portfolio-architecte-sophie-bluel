@@ -5,13 +5,11 @@ import { login, editorPage } from "./logIn.js";
 // Fetch all projects and categories from the API
 export async function fetchProjects() {
   const allProjects = await callWorks();
-  displayProjects(allProjects)
+  displayProjects(allProjects);
   console.log(allProjects);
-  
-  return allProjects
+  return allProjects;
 }
 const allCategory = await callCategory();
-
 
 // Function to display selected projects in the gallery
 export function displayProjects(projectsSelected) {
@@ -62,9 +60,9 @@ export async function clickFilter() {
       buttonStatus(allButtons, button); // Manage button states (active/disabled)
       const id = e.target.getAttribute("data-index");
       if (id === "all") {
-        fetchProjects() // Show all projects
+        fetchProjects(); // Show all projects
       } else {
-        const allProjects = await fetchProjects()
+        const allProjects = await fetchProjects();
         const projectsSelected = allProjects.filter(
           (project) => project.categoryId === parseInt(id) // Filter projects by category
         );
@@ -88,11 +86,9 @@ export function buttonStatus(allButtons, button) {
 
 export async function init() {
   login();
-  fetchProjects()
+  fetchProjects();
   createFilters();
   clickFilter();
   modal();
 }
 init();
-
-// added functionality that allows to add projects

@@ -1,5 +1,5 @@
-import { fetchProjects } from "./script.js";
-import { callWorks, callCategory, postWork} from "./api.js";
+import { fetchProjects, init } from "./script.js";
+import { callWorks, callCategory, postWork } from "./api.js";
 const editionBtn = document.querySelector(".editionBtn");
 const modalContainer = document.querySelector(".modal-container");
 const addBtn = document.querySelector(".modal-btn");
@@ -26,14 +26,11 @@ export function modal() {
       closeModal();
     }
   });
-  addBtn.removeEventListener("click", pushWork);
   addBtn.addEventListener("click", handleValidate);
 }
 
 async function closeModal() {
   modalContainer.classList.add("hidden");
-  const newProjects = await callWorks()
-  fetchProjects(newProjects)
 }
 
 async function displayContent() {
@@ -42,7 +39,7 @@ async function displayContent() {
 
   addBtn.innerHTML = "Ajouter une photo";
   modalTitle.innerHTML = "Galerie photo";
-  const allProjects = await fetchProjects()
+  const allProjects = await fetchProjects();
   allProjects.forEach((project) => {
     const container = document.createElement("div");
     container.classList.add("imageIconContainer");
@@ -117,7 +114,7 @@ async function displayAddWork() {
 
   categories.forEach((category) => {
     const option = document.createElement("option");
-    option.setAttribute("data-index", category.id)
+    option.setAttribute("data-index", category.id);
     option.setAttribute("value", `${category.name}`);
     option.innerHTML = `${category.name}`;
     select.appendChild(option);
@@ -143,11 +140,10 @@ async function displayAddWork() {
   containerInputs.appendChild(inputContainerT);
   containerInputs.appendChild(inputContainerS);
   content.appendChild(containerInputs);
-  
+
   addWork(); // Ajoute le gestionnaire d'événements pour le fichier
   validateForm(inputTitle, select, input); // Valide le formulaire
 }
-let imageUrl
 
 function addWork() {
   const fileInput = document.querySelector(".containerAddPhoto input");
@@ -156,20 +152,20 @@ function addWork() {
   fileInput.addEventListener("change", (event) => {
     // Vérifie si un fichier est sélectionné
     selectedFiles = event.target.files[0]; // Stocke le fichier sélectionné dans la variable globale
-    
+
     if (selectedFiles) {
       const container = document.querySelector(".containerAddPhoto");
       const reader = new FileReader();
 
       // Définit la fonction à exécuter lorsque la lecture du fichier est terminée
       reader.onload = (e) => {
-        imageUrl = e.target.result; // Ne pas réutiliser selectedFiles ici
+        const imageUrl = e.target.result; // Ne pas réutiliser selectedFiles ici
         container.innerHTML = ""; // Efface le contenu
         const input = document.createElement("input");
         input.setAttribute("type", "file");
         input.setAttribute("id", "file");
         input.classList.add("hidden");
-        
+
         const containerImageLabel = document.createElement("div");
         containerImageLabel.classList.add("containerImageLabel");
         const imageLoad = document.createElement("img");
@@ -178,7 +174,7 @@ function addWork() {
         const labelImage = document.createElement("label");
         labelImage.setAttribute("for", "file");
         labelImage.classList.add("label-image");
-        
+
         containerImageLabel.appendChild(imageLoad);
         containerImageLabel.appendChild(labelImage);
         container.appendChild(containerImageLabel);
@@ -192,59 +188,56 @@ function addWork() {
     }
   });
 }
-
+let clickHandler;
 async function validateForm(inputTitle, select, input) {
   function checkValidation() {
     const isTitleFilled = inputTitle.value.trim() !== ""; // Vérifie si le titre est rempli
     const isCategorySelected = select.value !== ""; // Vérifie si une catégorie est sélectionnée
     const isImageSelected = input.files.length > 0; // Vérifie si une image est sélectionnée
-
     // Si toutes les conditions sont remplies, activer le bouton de validation
     if (isTitleFilled && isCategorySelected && isImageSelected) {
       addBtn.classList.remove("modal-btn-disabled");
       addBtn.disabled = false;
-
-      // Assurez-vous d'utiliser la valeur correcte pour la catégorie
-      addBtn.addEventListener("click", async() => {
-        const selectedOption = select.options[select.selectedIndex];
-        const categoryId = selectedOption.dataset.index;
-        pushWork(selectedFiles, inputTitle.value, categoryId); // Vérifiez ici que la valeur de category est correcte
-
-        
-      });
+      clickHandler = () => handleAddWorkBtn(select, inputTitle, input);
+      addBtn.addEventListener("click", clickHandler); // Ajoute l'écouteur
     } else {
       addBtn.classList.add("modal-btn-disabled");
       addBtn.disabled = true;
     }
   }
-
-  // Ajouter des écouteurs pour chaque champ à valider
   inputTitle.addEventListener("input", checkValidation);
   select.addEventListener("change", checkValidation);
   input.addEventListener("change", checkValidation);
 }
 
-
-
-async function pushWork(image, title, categoryId) {
-
-    const response = await postWork(image, title, categoryId); // Passez le fichier réel ici
-    if (response) {
-      closeModal(); // Fermer la modale après soumission
-    }
+async function handleAddWorkBtn(select, title, input) {
+  const selectedOption = select.options[select.selectedIndex];
+  const categoryId = selectedOption.dataset.index;
+  const response = await postWork(selectedFiles, title.value, categoryId);
+  if (response) {
+    clearInputs(select, title, input);
+    addBtn.removeEventListener("click", clickHandler);
+    closeModal(); // Fermer la modale après soumission
+  }
 }
 
+function clearInputs(select, title, input) {
+  const containerImageLabel = document.querySelector(".containerImageLabel");
+  const imageLoad = document.querySelector(".imageLoad");
+  containerImageLabel.removeChild(imageLoad);
+  select.selectedIndex = -1;
+  title.value = "";
+  input.value = "";
+}
 // Fonction pour gérer le retour
 function handleReturnClick() {
   returnBtn.classList.add("visibilityHidden");
   addBtn.classList.remove("modal-btn-disabled");
   addBtn.disabled = false;
-
   modal();
 }
 
 function handleValidate() {
   addBtn.disabled = true;
-
   displayAddWork();
 }

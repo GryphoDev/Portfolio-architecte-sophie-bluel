@@ -1,9 +1,5 @@
-import { loginUser, callWorks } from "./api.js";
-import {
-  fetchProjects,
-  createFilters,
-  clickFilter,
-} from "./script.js";
+import { loginUser } from "./api.js";
+import { fetchProjects, createFilters, clickFilter } from "./script.js";
 
 const homePage = document.querySelector(".home-page");
 const loginPage = document.querySelector(".login-container");
@@ -47,7 +43,7 @@ async function fetchToken(email, password) {
     localStorage.setItem("authToken", token);
     homePage.classList.remove("hidden");
     loginPage.classList.add("hidden");
-    fetchProjects()
+    fetchProjects();
     editorPage();
   } else {
     alert("L'identifiant ou le mot de passe est incorrect");
@@ -71,7 +67,7 @@ export function editorPage() {
 
 async function closeEditorPage() {
   localStorage.removeItem("authToken");
-  fetchProjects()
+  fetchProjects();
   createFilters();
   clickFilter();
   document.querySelector(".filter").classList.remove("hidden");
