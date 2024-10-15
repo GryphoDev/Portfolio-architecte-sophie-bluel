@@ -54,6 +54,7 @@
 }
 .imageIconContainer {
   position: relative;
+  height: 103px;
 }
 .fa-trash-can {
   position: absolute;

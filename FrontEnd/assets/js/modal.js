@@ -1,5 +1,5 @@
-import { fetchProjects } from "./script.js";
-import { deleteProject, callCategory, postWork } from "./api.js";
+import { displayProjects } from "./script.js";
+import { deleteProject, callCategory, postWork, callWorks } from "./api.js";
 const editionBtn = document.querySelector(".editionBtn");
 const modalContainer = document.querySelector(".modal-container");
 const addBtn = document.querySelector(".modal-btn");
@@ -31,17 +31,16 @@ export function modal() {
 
 async function closeModal() {
   modalContainer.classList.add("hidden");
-  modal();
 }
 
 async function displayContent() {
+  const newProjects = await callWorks();
   content.innerHTML = ""; // Efface le contenu de la modale
   content.classList.add("grid-modal-work");
 
   addBtn.innerHTML = "Ajouter une photo";
   modalTitle.innerHTML = "Galerie photo";
-  const allProjects = await fetchProjects();
-  allProjects.forEach((project) => {
+  newProjects.forEach((project) => {
     const container = document.createElement("div");
     container.classList.add("imageIconContainer");
 
@@ -59,9 +58,11 @@ async function displayContent() {
   const trash = document.querySelectorAll(".fa-trash-can");
   trash.forEach((trash) =>
     trash.addEventListener("click", async (e) => {
-      const workId = e.target.dataset.index;
+      const workId = e.currentTarget.dataset.index;
       await deleteProject(workId);
       displayContent();
+      const newProjects = await callWorks();
+      displayProjects(newProjects);
     })
   );
 }
@@ -224,9 +225,11 @@ async function handleAddWorkBtn(select, title, input) {
   const categoryId = selectedOption.dataset.index;
   const response = await postWork(selectedFiles, title.value, categoryId);
   if (response) {
-    clearInputs(select, title, input);
     addBtn.removeEventListener("click", clickHandler);
-    closeModal(); // Fermer la modale après soumission
+    clearInputs(select, title, input);
+    const newProjects = await callWorks();
+    displayAddWork();
+    displayProjects(newProjects);
   }
 }
 

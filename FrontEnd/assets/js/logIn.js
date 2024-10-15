@@ -1,12 +1,17 @@
-import { loginUser } from "./api.js";
-import { fetchProjects, createFilters, clickFilter } from "./script.js";
+import { callWorks, loginUser } from "./api.js";
+import {
+  createFilters,
+  clickFilter,
+  displayProjects,
+  allProjects,
+} from "./script.js";
 
 const homePage = document.querySelector(".home-page");
 const loginPage = document.querySelector(".login-container");
 
 export function login() {
-  document.querySelector(".logInOut").addEventListener("click", () => {
-    if (localStorage.getItem("authToken")) {
+  document.querySelector(".logInOut").addEventListener("click", (e) => {
+    if (e.currentTarget.innerHTML === "logout") {
       return;
     }
     homePage.classList.add("hidden");
@@ -43,7 +48,8 @@ async function fetchToken(email, password) {
     localStorage.setItem("authToken", token);
     homePage.classList.remove("hidden");
     loginPage.classList.add("hidden");
-    fetchProjects();
+    const works = await callWorks();
+    displayProjects(works);
     editorPage();
   } else {
     alert("L'identifiant ou le mot de passe est incorrect");
@@ -58,7 +64,11 @@ export function editorPage() {
   const logOut = document.querySelector(".logInOut");
   logOut.innerHTML = "logout";
   if (!logOut.hasAttribute("data-logout-attached")) {
-    logOut.addEventListener("click", () => {
+    logOut.addEventListener("click", async () => {
+      const newProjects = await callWorks();
+      displayProjects(newProjects);
+      createFilters();
+      clickFilter(newProjects);
       closeEditorPage();
     });
     logOut.setAttribute("data-logout-attached", "true");
@@ -67,9 +77,6 @@ export function editorPage() {
 
 async function closeEditorPage() {
   localStorage.removeItem("authToken");
-  fetchProjects();
-  createFilters();
-  clickFilter();
   document.querySelector(".filter").classList.remove("hidden");
   document.querySelector(".loginHeader").classList.add("hidden");
   document.querySelector(".editionBtn").classList.add("hidden");

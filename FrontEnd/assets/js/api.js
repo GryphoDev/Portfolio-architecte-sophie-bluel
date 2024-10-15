@@ -55,25 +55,18 @@ export async function deleteProject(projectId) {
   const token = localStorage.getItem("authToken");
   const url = `http://localhost:5678/api/works/${projectId}`;
 
-  try {
-    const response = await fetch(url, {
-      method: "DELETE",
-      headers: {
-        Accept: "*/*",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (response.status === 204) {
-      console.log(`Project with ID ${projectId} deleted successfully.`);
-    } else if (response.status === 401) {
-      console.error("Unauthorized: Please check your token.");
-    } else if (response.status === 500) {
-      console.error("Internal Server Error: An unexpected error occurred.");
-    } else {
-      console.error(`Unexpected response: ${response.status}`);
-    }
-  } catch (error) {
-    console.error("Error:", error);
+  const response = await fetch(url, {
+    method: "DELETE",
+    headers: {
+      Accept: "*/*",
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (response.ok) {
+    return true;
+  }
+  if (!response.ok) {
+    console.error("Erreur lors de l'ajout de l'œuvre:", response.statusText);
+    return;
   }
 }

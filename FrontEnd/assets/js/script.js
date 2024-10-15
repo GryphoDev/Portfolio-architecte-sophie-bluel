@@ -2,13 +2,7 @@ import { callWorks, callCategory } from "./api.js";
 import { modal } from "./modal.js";
 import { login, editorPage } from "./logIn.js";
 
-// Fetch all projects and categories from the API
-export async function fetchProjects() {
-  const allProjects = await callWorks();
-  displayProjects(allProjects);
-  console.log(allProjects);
-  return allProjects;
-}
+export const allProjects = await callWorks();
 const allCategory = await callCategory();
 
 // Function to display selected projects in the gallery
@@ -52,7 +46,7 @@ export function createFilters() {
 }
 
 // Function to handle filter button click events
-export async function clickFilter() {
+export async function clickFilter(projects) {
   const allButtons = document.querySelectorAll("nav button"); // Get all filter buttons
 
   allButtons.forEach((button) => {
@@ -60,10 +54,9 @@ export async function clickFilter() {
       buttonStatus(allButtons, button); // Manage button states (active/disabled)
       const id = e.target.getAttribute("data-index");
       if (id === "all") {
-        fetchProjects(); // Show all projects
+        displayProjects(projects);
       } else {
-        const allProjects = await fetchProjects();
-        const projectsSelected = allProjects.filter(
+        const projectsSelected = projects.filter(
           (project) => project.categoryId === parseInt(id) // Filter projects by category
         );
         displayProjects(projectsSelected); // Show filtered projects
@@ -80,15 +73,14 @@ export function buttonStatus(allButtons, button) {
   button.classList.add("button_active"); // Add active class to clicked button
   button.disabled = true; // Disable clicked button
 }
-// function to check if user is login
 
 // Initial display of all projects and setup of filters
 
 export async function init() {
   login();
-  fetchProjects();
+  displayProjects(allProjects);
   createFilters();
-  clickFilter();
+  clickFilter(allProjects);
   modal();
 }
 init();
