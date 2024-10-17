@@ -7,7 +7,7 @@ import {
 } from "./script.js";
 
 const homePage = document.querySelector(".home-page");
-const body = document.querySelector("body");
+export const body = document.querySelector("body");
 const portfolioTitle = document.querySelector(".portfolio-title h2");
 const loginPage = document.querySelector(".login-container");
 const logOutBtn = document.querySelector(".logInOut");
@@ -80,6 +80,7 @@ export function displayEditorPage() {
   filters.classList.add("hidden");
   document.getElementById("projects").style.marginBottom = "92px";
   logOutBtn.innerHTML = "logout";
+
   if (!logOutBtn.hasAttribute("data-logout-attached")) {
     logOutBtn.addEventListener("click", async () => {
       const newProjects = await callWorks();

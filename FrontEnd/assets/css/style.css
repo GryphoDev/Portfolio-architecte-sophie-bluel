@@ -141,7 +141,7 @@ body {
   font-family: "Work Sans";
   font-size: 14px;
   height: 100%;
-  transform: translateY(-59px);
+  padding-top: -59px;
 }
 .mainContent {
   display: flex;
@@ -150,12 +150,11 @@ body {
   max-width: 1140px;
   margin: auto;
   height: 100%;
-  transform: translateY(-59px);
 }
 header {
   display: flex;
   justify-content: space-between;
-  margin: 109px 0 50px;
+  margin: 59px 0 50px;
 }
 section {
   margin: 50px 0;
@@ -268,7 +267,7 @@ a:hover {
   color: white;
 }
 .filter .button_active:hover {
-  background-color: #1d6154;
+  border: 1px solid #1d6154;
   color: white;
 }
 .gallery {

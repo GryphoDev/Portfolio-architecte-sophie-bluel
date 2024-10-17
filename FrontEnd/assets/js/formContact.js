@@ -8,7 +8,6 @@ export function validateFormContact() {
       const email = document.getElementById("email-contact").value;
       const message = document.getElementById("message").value;
 
-      // Vérification basique
       if (!name || !email || !message) {
         alert("Tous les champs sont requis !");
         return;

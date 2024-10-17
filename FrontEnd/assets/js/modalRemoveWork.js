@@ -1,6 +1,7 @@
 import { displayProjectsHomePage } from "./script.js";
 import { deleteProject, callWorks } from "./api.js";
 import { displayAddWorkModal } from "./modalAddWork.js";
+import { body } from "./logIn.js";
 const editionBtnEditorPage = document.querySelector(".editionBtn");
 const modalContainer = document.querySelector(".modal-container");
 export const modalContent = document.querySelector(".modal-content");
@@ -11,6 +12,7 @@ export function manageModalDisplay() {
   displayContentModalRemoveWork(); // Appel initial pour afficher le contenu
 
   editionBtnEditorPage.addEventListener("click", () => {
+    body.classList.remove("translateBottom");
     modalContainer.classList.remove("hidden");
   });
 
