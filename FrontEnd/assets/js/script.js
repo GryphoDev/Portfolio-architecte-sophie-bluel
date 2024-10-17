@@ -1,6 +1,7 @@
 import { callWorks, callCategory } from "./api.js";
 import { manageModalDisplay } from "./modalRemoveWork.js";
 import { displayLoginPage, displayEditorPage } from "./logIn.js";
+import { validateFormContact } from "./formContact.js";
 
 export const allProjects = await callWorks();
 const allCategory = await callCategory();
@@ -83,5 +84,6 @@ export async function init() {
   createFiltersHomePage();
   clickFilterHomePage(allProjects);
   manageModalDisplay();
+  validateFormContact();
 }
 init();
