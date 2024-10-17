@@ -14,6 +14,7 @@ export function displayProjectsHomePage(projectsSelected) {
   document.querySelector(".gallery").innerHTML = ""; // Clear gallery
   projectsSelected.forEach((element) => {
     const figure = document.createElement("figure");
+    figure.classList.add("imageApparition");
     const workImage = document.createElement("img");
     const workTitle = document.createElement("figcaption");
 

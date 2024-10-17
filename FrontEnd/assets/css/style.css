@@ -1,5 +1,6 @@
 @import url("./login-page.css");
 @import url("./modal.css");
+@import url(./annimation.css);
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -140,6 +141,7 @@ body {
   font-family: "Work Sans";
   font-size: 14px;
   height: 100%;
+  transform: translateY(-59px);
 }
 .mainContent {
   display: flex;
@@ -148,11 +150,12 @@ body {
   max-width: 1140px;
   margin: auto;
   height: 100%;
+  transform: translateY(-59px);
 }
 header {
   display: flex;
   justify-content: space-between;
-  margin: 50px 0;
+  margin: 109px 0 50px;
 }
 section {
   margin: 50px 0;
@@ -184,6 +187,9 @@ nav ul {
   align-items: center;
   gap: 44px;
   list-style-type: none;
+}
+a {
+  text-decoration: none;
 }
 nav a {
   padding: 0 10px;
@@ -252,7 +258,16 @@ a:hover {
   background-color: white;
   cursor: pointer;
 }
+.filter button:hover {
+  border: 1px solid #b1663c;
+  color: #b1663c;
+}
+
 .filter .button_active {
+  background-color: #1d6154;
+  color: white;
+}
+.filter .button_active:hover {
   background-color: #1d6154;
   color: white;
 }
