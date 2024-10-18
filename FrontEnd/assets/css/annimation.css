@@ -7,7 +7,15 @@
   animation: imageDisparition 500ms forwards;
   opacity: 1;
 }
+.fastApparition {
+  animation: imageApparition 200ms forwards;
+  opacity: 0;
+}
 
+.fastDisparition {
+  animation: imageDisparition 200ms forwards;
+  opacity: 1;
+}
 @keyframes imageDisparition {
   0% {
     opacity: 1;

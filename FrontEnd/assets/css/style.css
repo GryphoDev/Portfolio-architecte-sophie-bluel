@@ -141,8 +141,8 @@ body {
   font-family: "Work Sans";
   font-size: 14px;
   height: 100%;
-  padding-top: -59px;
 }
+
 .mainContent {
   display: flex;
   flex-direction: column;

@@ -7,7 +7,7 @@ import {
 } from "./modalRemoveWork.js";
 import { callCategory, postWork, callWorks } from "./api.js";
 import { displayProjectsHomePage } from "./script.js";
-const returnBtn = document.querySelector(".fa-arrow-left");
+export const returnBtn = document.querySelector(".fa-arrow-left");
 let selectedImageInputFile; // Déclaration en haut pour être accessible partout
 let addWorkBtnListener;
 
@@ -95,11 +95,11 @@ export async function displayAddWorkModal() {
   containerInputs.appendChild(inputCategoriesContainer);
   modalContent.appendChild(containerInputs);
 
-  manageInputFileDisplay(); // Ajoute le gestionnaire d'événements pour le fichier
+  manageInputFileDisplay(containerInputFileImage); // Ajoute le gestionnaire d'événements pour le fichier
   validateForm(inputTitle, inputSelect, inputFile); // Valide le formulaire
 }
 
-function manageInputFileDisplay() {
+function manageInputFileDisplay(containerInputFileImage) {
   const fileInput = document.querySelector(".containerAddPhoto input");
 
   // Ajoute un écouteur sur le changement du fichier
@@ -108,8 +108,7 @@ function manageInputFileDisplay() {
     selectedImageInputFile = event.target.files[0]; // Stocke le fichier sélectionné dans la variable globale
 
     if (selectedImageInputFile) {
-      const containerInputFileImage =
-        document.querySelector(".containerAddPhoto");
+      document.querySelector(".containerAddPhoto");
       const reader = new FileReader();
 
       // Définit la fonction à exécuter lorsque la lecture du fichier est terminée
@@ -134,6 +133,8 @@ function manageInputFileDisplay() {
         containerImageLabel.appendChild(labelImage);
         containerInputFileImage.appendChild(containerImageLabel);
         containerInputFileImage.appendChild(inputFile);
+
+        manageInputFileDisplay(containerInputFileImage);
       };
 
       // Lit le fichier comme une URL de données
@@ -177,6 +178,7 @@ async function handleAddWorkBtn(inputSelect, inputTitle, inputFile) {
     validateModalBtn.removeEventListener("click", addWorkBtnListener);
     clearInputs(inputSelect, inputTitle, inputFile);
     const newProjects = await callWorks();
+
     displayAddWorkModal();
     displayProjectsHomePage(newProjects);
   }
@@ -191,7 +193,8 @@ function clearInputs(inputSelect, inputTitle, inputFile) {
   inputFile.value = "";
 }
 // Fonction pour gérer le retour
-function handleReturnClick() {
+export function handleReturnClick() {
+  modalContent.classList.add("overflowHidden");
   returnBtn.classList.add("visibilityHidden");
   validateModalBtn.classList.remove("modal-btn-disabled");
   validateModalBtn.disabled = false;

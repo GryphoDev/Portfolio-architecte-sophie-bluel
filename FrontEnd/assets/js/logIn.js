@@ -5,6 +5,7 @@ import {
   clickFilterHomePage,
   displayProjectsHomePage,
 } from "./script.js";
+import { modalContainer } from "./modalRemoveWork.js";
 
 const homePage = document.querySelector(".home-page");
 export const body = document.querySelector("body");
@@ -70,13 +71,15 @@ async function fetchToken(email, password) {
 
 export function displayEditorPage() {
   portfolioTitle.classList.remove("translateRight");
-  editionBtn.classList.remove("imageDisparition");
+  editionBtn.classList.remove("fastDisparition");
   editionBtn.classList.remove("hidden");
   editionBtn.classList.remove("visibilityHidden");
   logOutBtn.removeAttribute("data-logout-attached");
   filters.classList.remove("scale");
-  body.classList.remove("translateTop");
-  body.classList.add("translateBottom");
+  if (modalContainer.classList.contains("hidden")) {
+    body.classList.remove("translateTop");
+    body.classList.add("translateBottom");
+  }
   filters.classList.add("hidden");
   document.getElementById("projects").style.marginBottom = "92px";
   logOutBtn.innerHTML = "logout";
@@ -96,8 +99,7 @@ export function displayEditorPage() {
 async function closeEditorPage() {
   localStorage.removeItem("authToken");
   editionBtn.classList.remove("hidden");
-  editionBtn.classList.add("visibilityHidden");
-  editionBtn.classList.add("imageDisparition");
+  editionBtn.classList.add("fastDisparition");
   body.classList.remove("translateBottom");
   body.classList.add("translateTop");
   filters.classList.remove("hidden");
@@ -105,4 +107,7 @@ async function closeEditorPage() {
   portfolioTitle.classList.add("translateRight");
   logOutBtn.innerHTML = "login";
   document.getElementById("projects").style.marginBottom = "0px";
+  setTimeout(() => {
+    editionBtn.classList.add("visibilityHidden");
+  }, 200);
 }

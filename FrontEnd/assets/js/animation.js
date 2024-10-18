@@ -3,9 +3,9 @@ export async function manageTransitionAnimation(
   elementApparition
 ) {
   return new Promise((resolve) => {
-    elementDisparition.classList.add("imageDisparition");
+    elementDisparition.classList.add("fastDisparition");
     setTimeout(() => {
-      elementDisparition.classList.remove("imageDisparition");
+      elementDisparition.classList.remove("fastDisparition");
       elementDisparition.classList.add("hidden");
       elementApparition.classList.remove("hidden");
       resolve();

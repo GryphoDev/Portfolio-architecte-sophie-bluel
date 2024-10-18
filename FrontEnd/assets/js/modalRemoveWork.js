@@ -1,9 +1,9 @@
 import { displayProjectsHomePage } from "./script.js";
 import { deleteProject, callWorks } from "./api.js";
-import { displayAddWorkModal } from "./modalAddWork.js";
+import { displayAddWorkModal, handleReturnClick } from "./modalAddWork.js";
 import { body } from "./logIn.js";
 const editionBtnEditorPage = document.querySelector(".editionBtn");
-const modalContainer = document.querySelector(".modal-container");
+export const modalContainer = document.querySelector(".modal-container");
 export const modalContent = document.querySelector(".modal-content");
 export const modalTitle = document.querySelector(".modal-title");
 export const validateModalBtn = document.querySelector(".modal-btn");
@@ -13,7 +13,10 @@ export function manageModalDisplay() {
 
   editionBtnEditorPage.addEventListener("click", () => {
     body.classList.remove("translateBottom");
+    modalContainer.classList.remove("fastDisparition");
     modalContainer.classList.remove("hidden");
+    modalContainer.classList.add("fastApparition");
+    modalContent.classList.add("overflowHidden");
   });
 
   const closeModalBtn = document.querySelector(".fa-xmark");
@@ -29,8 +32,13 @@ export function manageModalDisplay() {
   validateModalBtn.addEventListener("click", goToAddWorkModal);
 }
 
-async function closeModal() {
-  modalContainer.classList.add("hidden");
+export async function closeModal() {
+  modalContainer.classList.remove("fastApparition");
+  modalContainer.classList.add("fastDisparition");
+  setTimeout(() => {
+    modalContainer.classList.add("hidden");
+    handleReturnClick();
+  }, 200);
 }
 
 async function displayContentModalRemoveWork() {
@@ -68,6 +76,7 @@ async function displayContentModalRemoveWork() {
 }
 
 export function goToAddWorkModal() {
+  modalContent.classList.remove("overflowHidden");
   validateModalBtn.disabled = true;
   displayAddWorkModal();
 }
