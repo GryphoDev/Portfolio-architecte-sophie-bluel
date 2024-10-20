@@ -1,60 +1,52 @@
+// Fetches all works from the API
 export async function callWorks() {
   const response = await fetch("http://localhost:5678/api/works");
   return await response.json();
 }
+
+// Fetches all categories from the API
 export async function callCategory() {
   const response = await fetch("http://localhost:5678/api/categories");
   return await response.json();
 }
+
+// Authenticates the user and retrieves a token
 export async function callLoginUser(email, password) {
   const response = await fetch("http://localhost:5678/api/users/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      email: email,
-      password: password,
-    }),
+    body: JSON.stringify({ email, password }),
   });
   const data = await response.json();
-  const token = data.token;
-  return token;
+  return data.token;
 }
+
+// Sends a new work to the API
 export async function postWork(image, title, category) {
   const token = localStorage.getItem("authToken");
-
-  // Création de l'objet FormData pour envoyer les données en multipart/form-data
   const formData = new FormData();
-  formData.append("image", image); // Ajoute l'image au formData
-  formData.append("title", title); // Ajoute le titre au formData
-  formData.append("category", category); // Ajoute la catégorie au formData
-
+  formData.append("image", image);
+  formData.append("title", title);
+  formData.append("category", category);
   try {
     const response = await fetch("http://localhost:5678/api/works", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`, // Ajout du token d'authentification
-        // Ne pas ajouter de Content-Type ici. Fetch ajoute automatiquement le bon Content-Type (multipart/form-data)
-      },
-      body: formData, // Utilisation de FormData comme corps de la requête
+      headers: { Authorization: `Bearer ${token}` },
+      body: formData,
     });
-    if (response.ok) {
-      return true;
-    }
-    if (!response.ok) {
-      console.error("Erreur lors de l'ajout de l'œuvre:", response.statusText);
-      return;
-    }
+    if (response.ok) return true;
+    console.error("Error adding work:", response.statusText);
   } catch (error) {
-    console.error("Erreur lors de la requête:", error);
+    console.error("Request error:", error);
   }
 }
 
+// Deletes a project by ID
 export async function deleteProject(projectId) {
   const token = localStorage.getItem("authToken");
   const url = `http://localhost:5678/api/works/${projectId}`;
-
   const response = await fetch(url, {
     method: "DELETE",
     headers: {
@@ -62,11 +54,6 @@ export async function deleteProject(projectId) {
       Authorization: `Bearer ${token}`,
     },
   });
-  if (response.ok) {
-    return true;
-  }
-  if (!response.ok) {
-    console.error("Erreur lors de l'ajout de l'œuvre:", response.statusText);
-    return;
-  }
+  if (response.ok) return true;
+  console.error("Error deleting project:", response.statusText);
 }

@@ -2,82 +2,80 @@ import { callWorks, callCategory } from "./api.js";
 import { manageModalDisplay } from "./modalRemoveWork.js";
 import { displayLoginPage, displayEditorPage } from "./logIn.js";
 import { validateFormContact } from "./formContact.js";
+import { append } from "./utils.js";
 
+// Fetches all projects and categories
 export const allProjects = await callWorks();
 const allCategory = await callCategory();
 
-// Function to display selected projects in the gallery
+// Displays selected projects on the homepage
 export function displayProjectsHomePage(projectsSelected) {
   const token = localStorage.getItem("authToken");
   if (token) {
     displayEditorPage();
   }
-  document.querySelector(".gallery").innerHTML = ""; // Clear gallery
+  document.querySelector(".gallery").innerHTML = "";
   projectsSelected.forEach((element) => {
     const figure = document.createElement("figure");
     figure.classList.add("imageApparition");
     const workImage = document.createElement("img");
     const workTitle = document.createElement("figcaption");
-
-    workImage.src = element.imageUrl; // Set project image
-    workTitle.innerHTML = element.title; // Set project title
-
-    figure.appendChild(workImage);
-    figure.appendChild(workTitle);
-
-    document.querySelector(".gallery").appendChild(figure); // Append project to gallery
+    workImage.src = element.imageUrl;
+    workTitle.innerHTML = element.title;
+    append(figure, [workImage, workTitle]);
+    document.querySelector(".gallery").appendChild(figure);
   });
 }
 
-// Function to create filter buttons for each category
+// Creates filter buttons for categories
 export function createFiltersHomePage() {
   const filters = document.querySelector(".filter");
   filters.innerHTML = "";
-
   const filterAllWorks = document.createElement("button");
-  filterAllWorks.innerHTML = "Tous"; // "All" filter button
+  filterAllWorks.innerHTML = "Tous"; // Filter for all works
   filterAllWorks.setAttribute("data-index", "all");
-  filterAllWorks.classList.add("button_active"); // Default active button
+  filterAllWorks.classList.add("button_active");
   filters.appendChild(filterAllWorks);
+  // Create a button for each category
   allCategory.forEach((category) => {
     const filter = document.createElement("button");
-    filter.innerHTML = category.name; // Set category name on button
-    filter.setAttribute("data-index", category.id); // Set category id on button
-    document.querySelector(".filter").appendChild(filter); // Append button to filter container
+    filter.innerHTML = category.name;
+    filter.setAttribute("data-index", category.id);
+    document.querySelector(".filter").appendChild(filter);
   });
 }
 
-// Function to handle filter button click events
+// Handles filter button click events
 export async function clickFilterHomePage(projects) {
-  const AllFilterBtn = document.querySelectorAll("nav button"); // Get all filter buttons
-
+  const AllFilterBtn = document.querySelectorAll("nav button");
   AllFilterBtn.forEach((filter) => {
     filter.addEventListener("click", async (e) => {
-      filterBtnClassStatus(AllFilterBtn, filter); // Manage button states (active/disabled)
+      filterBtnClassStatus(AllFilterBtn, filter);
       const id = e.target.getAttribute("data-index");
+      // Display projects based on the selected filter
       if (id === "all") {
         displayProjectsHomePage(projects);
       } else {
         const projectsSelected = projects.filter(
-          (project) => project.categoryId === parseInt(id) // Filter projects by category
+          (project) => project.categoryId === parseInt(id)
         );
-        displayProjectsHomePage(projectsSelected); // Show filtered projects
+        displayProjectsHomePage(projectsSelected);
       }
     });
   });
 }
-// Function to manage button active state and disable the clicked button
+
+// Updates active filter button and disables it
 export function filterBtnClassStatus(AllFilterBtn, filter) {
   AllFilterBtn.forEach((btn) => {
-    btn.classList.remove("button_active"); // Remove active class from all buttons
-    btn.disabled = false; // Enable all buttons
+    btn.classList.remove("button_active");
+    btn.disabled = false;
   });
-  filter.classList.add("button_active"); // Add active class to clicked button
-  filter.disabled = true; // Disable clicked button
+  filter.classList.add("button_active");
+  filter.disabled = true;
 }
 
-// Initial display of all projects and setup of filters
-
+// Initializes the page with default view and behaviors
 export async function init() {
   displayLoginPage();
   displayProjectsHomePage(allProjects);

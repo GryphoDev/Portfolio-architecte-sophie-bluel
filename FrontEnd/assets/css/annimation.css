@@ -16,6 +16,22 @@
   animation: imageDisparition 200ms forwards;
   opacity: 1;
 }
+.translateBottom {
+  animation: translateBottom 500ms forwards;
+  transform: translateY(0);
+}
+.translateTop {
+  animation: translateTop 500ms forwards;
+  transform: translateY(59px);
+}
+.translateRight {
+  animation: translateRight 500ms forwards cubic-bezier(0.69, 0.18, 0.46, 1.44);
+  transform: translateX(0);
+}
+.scale {
+  animation: scale 500ms forwards cubic-bezier(0.69, 0.18, 0.46, 1.44);
+  transform: scale(0.8);
+}
 @keyframes imageDisparition {
   0% {
     opacity: 1;
@@ -33,22 +49,6 @@
     opacity: 1;
   }
 }
-.translateBottom {
-  animation: translateBottom 500ms forwards;
-  transform: translateY(-59px);
-}
-.translateTop {
-  animation: translateTop 500ms forwards;
-  transform: translateY(0);
-}
-.translateRight {
-  animation: translateRight 500ms forwards cubic-bezier(0.69, 0.18, 0.46, 1.44);
-  transform: translateX(0);
-}
-.scale {
-  animation: scale 500ms forwards cubic-bezier(0.69, 0.18, 0.46, 1.44);
-  transform: scale(0.8);
-}
 @keyframes translateRight {
   100% {
     transform: translateX(61.5px);
@@ -62,12 +62,20 @@
 
 @keyframes translateTop {
   100% {
-    transform: translateY(-59px);
+    transform: translateY(0);
   }
 }
 
 @keyframes translateBottom {
   100% {
-    transform: translateY(0);
+    transform: translateY(59px);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  @keyframes translateRight {
+    100% {
+      transform: translateX(0);
+    }
   }
 }

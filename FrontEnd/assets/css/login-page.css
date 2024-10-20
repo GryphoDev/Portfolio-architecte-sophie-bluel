@@ -33,3 +33,13 @@ li:nth-child(3) a {
 .login a {
   color: black;
 }
+@media screen and (max-width: 768px) {
+}
+@media screen and (max-width: 480px) {
+  .input_container {
+    width: 80%;
+  }
+  .input_container input {
+    width: 100%;
+  }
+}

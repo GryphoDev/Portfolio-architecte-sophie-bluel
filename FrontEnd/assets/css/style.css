@@ -1,6 +1,7 @@
 @import url("./login-page.css");
 @import url("./modal.css");
 @import url(./annimation.css);
+@import url(./modal-error.css);
 
 /* http://meyerweb.com/eric/tools/css/reset/
    v2.0 | 20110126
@@ -141,6 +142,7 @@ body {
   font-family: "Work Sans";
   font-size: 14px;
   height: 100%;
+  margin-top: -59px;
 }
 
 .mainContent {
@@ -150,6 +152,7 @@ body {
   max-width: 1140px;
   margin: auto;
   height: 100%;
+  padding: 0 20px;
 }
 header {
   display: flex;
@@ -181,6 +184,7 @@ h2 {
   font-size: 30px;
   color: #1d6154;
 }
+
 nav ul {
   display: flex;
   align-items: center;
@@ -203,14 +207,16 @@ a:hover {
 #introduction {
   display: flex;
   align-items: center;
+  margin: 0 50px;
 }
 #introduction figure {
   flex: 1;
 }
 #introduction img {
   display: block;
-  margin: auto;
   width: 80%;
+  min-height: 240px;
+  object-fit: cover;
 }
 
 #introduction article {
@@ -257,7 +263,8 @@ a:hover {
   background-color: white;
   cursor: pointer;
 }
-.filter button:hover {
+.filter button:hover,
+.containerAllBtn button:hover {
   border: 1px solid #b1663c;
   color: #b1663c;
 }
@@ -324,16 +331,13 @@ input[type="submit"] {
   width: 180px;
   text-align: center;
   border-radius: 60px;
+  cursor: pointer;
 }
 
 footer nav ul {
   display: flex;
   justify-content: flex-end;
   margin: 2em;
-}
-
-.hidden {
-  display: none;
 }
 
 .loginHeader {
@@ -350,4 +354,81 @@ footer nav ul {
   gap: 10px;
   height: 100%;
   font-size: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  header {
+    flex-direction: column;
+    gap: 15px;
+    margin: 59px 0 20px;
+  }
+  h1 {
+    text-align: center;
+  }
+  nav ul {
+    gap: 0;
+    justify-content: space-between;
+  }
+
+  #introduction {
+    flex-direction: column;
+    gap: 20px;
+    margin: 0;
+  }
+  #introduction h2 {
+    text-align: center;
+  }
+  #introduction img {
+    width: 100%;
+  }
+  #introduction p {
+    margin: auto;
+    width: 80%;
+  }
+  .filter {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .gallery {
+    grid-template-columns: 1fr;
+  }
+  .gallery img {
+    height: 450px;
+  }
+  #contact {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  h2 {
+    font-size: 25px;
+  }
+  section {
+    margin: 30px 0;
+  }
+  .portfolio-title {
+    flex-direction: column;
+    gap: 10px;
+  }
+  .filter {
+    margin: 20px 0;
+  }
+  .filter button {
+    padding: 10px 10px;
+    font-size: 14px;
+  }
+  .gallery img {
+    height: 300px;
+  }
+  #contact {
+    width: 100%;
+  }
+  footer nav ul {
+    justify-content: center;
+  }
+}
+
+.hidden {
+  display: none;
 }

@@ -18,7 +18,7 @@
     <script src="./assets/js/script.js" type="module"></script>
     <link rel="stylesheet" href="./assets/css/style.css" />
   </head>
-  <body class="translateTop">
+  <body>
     <div class="loginHeader">
       <div class="loginHeader-content">
         <i class="fa-regular fa-pen-to-square"></i>
@@ -111,7 +111,7 @@
               cols="30"
               rows="10"
             ></textarea>
-            <input type="submit" value="Envoyer" />
+            <input class="modal-btn-disabled" type="submit" value="Envoyer" />
           </form>
         </section>
       </main>
@@ -136,6 +136,9 @@
           <button class="modal-btn"></button>
         </div>
       </div>
+    </aside>
+    <aside class="container-error-message-modal hidden">
+      <div class="error-message-modal"></div>
     </aside>
   </body>
 </html>
