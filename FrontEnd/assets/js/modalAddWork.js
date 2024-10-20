@@ -90,10 +90,22 @@ export async function displayAddWorkModal() {
 
 function manageInputFileDisplay(containerInputFileImage) {
   const fileInput = document.querySelector(".containerAddPhoto input");
+  const validFormats = ["image/jpeg", "image/png"];
+  const maxFileSize = 4 * 1024 * 1024;
   // Add event listener to handle file selection
   fileInput.addEventListener("change", (event) => {
     selectedImageInputFile = event.target.files[0];
     if (selectedImageInputFile) {
+      if (!validFormats.includes(selectedImageInputFile.type)) {
+        displayAlert("Le format de l'image doit être JPG ou PNG.");
+        fileInput.value = "";
+        return;
+      }
+      if (selectedImageInputFile.size > maxFileSize) {
+        displayAlert("Votre image ne doit pas excéder 4 Mo.");
+        fileInput.value = ""; // Reset file input
+        return;
+      }
       const reader = new FileReader();
       // Read and display the selected image
       reader.onload = (e) => {
@@ -127,6 +139,7 @@ async function validateForm(inputTitle, inputSelect, inputFile) {
     const isTitleFilled = inputTitle.value.trim() !== ""; // Check if title is filled
     const isCategorySelected = inputSelect.value !== ""; // Check if category is selected
     const isImageSelected = inputFile.files.length > 0; // Check if an image is selected
+
     if (isTitleFilled && isCategorySelected && isImageSelected) {
       validateModalBtn.classList.remove("modal-btn-disabled");
       validateModalBtn.disabled = false;
@@ -153,7 +166,13 @@ async function handleAddWorkBtn(inputSelect, inputTitle, inputFile) {
     inputTitle.value,
     categoryId
   );
+  if (!response) {
+    displayAlert("Une erreur est survenue, veuillez réessayer.");
+    displayAddWorkModal();
+  }
   if (response) {
+    console.log(response);
+
     displayAlert("Votre projet a été ajouté avec succès");
     validateModalBtn.removeEventListener("click", addWorkBtnListener);
     clearInputs(inputSelect, inputTitle, inputFile);

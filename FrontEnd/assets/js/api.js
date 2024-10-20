@@ -55,5 +55,6 @@ export async function deleteProject(projectId) {
     },
   });
   if (response.ok) return true;
+  if (!response.ok) return false;
   console.error("Error deleting project:", response.statusText);
 }
