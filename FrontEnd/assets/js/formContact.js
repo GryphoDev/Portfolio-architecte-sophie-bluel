@@ -1,8 +1,8 @@
 export function validateFormContact() {
   document
     .getElementById("contactForm")
-    .addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevents default form submission
+    .addEventListener("submit", function (e) {
+      e.preventDefault(); // Prevents default form submission
       const name = document.getElementById("name").value;
       const email = document.getElementById("email-contact").value;
       const message = document.getElementById("message").value;

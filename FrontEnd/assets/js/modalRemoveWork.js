@@ -37,15 +37,6 @@ export function manageModalDisplay() {
   validateModalBtn.addEventListener("click", goToAddWorkModal);
 }
 
-// Close the modal
-export async function closeModal() {
-  switchClass([modalContainer], ["fastApparition"], ["fastDisparition"]);
-  setTimeout(() => {
-    modalContainer.classList.add("hidden");
-    handleReturnClick();
-  }, 200);
-}
-
 // Display content for removing work
 async function displayContentModalRemoveWork() {
   const newProjects = await callWorks();
@@ -54,15 +45,18 @@ async function displayContentModalRemoveWork() {
   validateModalBtn.innerHTML = "Ajouter une photo";
   modalTitle.innerHTML = "Galerie photo";
   newProjects.forEach((project) => {
-    const containerImageTrash = document.createElement("div");
-    containerImageTrash.classList.add("imageIconContainer");
-    const image = document.createElement("img");
-    image.src = project.imageUrl;
-    const trashIcon = document.createElement("i");
-    trashIcon.classList.add("fa-solid", "fa-trash-can");
-    trashIcon.setAttribute("data-index", project.id);
+    const containerImageTrash = Object.assign(document.createElement("div"), {
+      className: "imageIconContainer",
+    });
+    const image = Object.assign(document.createElement("img"), {
+      src: project.imageUrl,
+    });
+    const trashIcon = Object.assign(document.createElement("i"), {
+      className: "fa-solid fa-trash-can",
+    });
+    trashIcon.dataset.index = project.id;
     append(containerImageTrash, [image, trashIcon]);
-    modalContent.appendChild(containerImageTrash);
+    append(modalContent, [containerImageTrash]);
   });
 
   const allTrash = document.querySelectorAll(".fa-trash-can");
@@ -88,4 +82,12 @@ export function goToAddWorkModal() {
   modalContent.classList.remove("overflowHidden");
   validateModalBtn.disabled = true;
   displayAddWorkModal();
+}
+// Close the modal
+export async function closeModal() {
+  switchClass([modalContainer], ["fastApparition"], ["fastDisparition"]);
+  setTimeout(() => {
+    modalContainer.classList.add("hidden");
+    handleReturnClick();
+  }, 200);
 }

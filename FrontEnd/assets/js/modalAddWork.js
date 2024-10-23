@@ -27,52 +27,65 @@ export async function displayAddWorkModal() {
   // Clear modal content and create elements for file input and title
   modalContent.classList.remove("grid-modal-work");
   modalContent.innerHTML = "";
-  const containerInputFileImage = document.createElement("div");
-  containerInputFileImage.classList.add("containerAddPhoto");
-  const iconFaImage = document.createElement("i");
-  iconFaImage.classList.add("fa-regular", "fa-image");
-  const inputFile = document.createElement("input");
-  inputFile.setAttribute("type", "file");
-  inputFile.setAttribute("id", "file");
-  inputFile.classList.add("hidden");
-  const labelFile = document.createElement("label");
-  labelFile.classList.add("labelFile");
+
+  const containerInputFileImage = Object.assign(document.createElement("div"), {
+    className: "containerAddPhoto",
+  });
+  const iconFaImage = Object.assign(document.createElement("i"), {
+    className: "fa-regular fa-image",
+  });
+  const inputFile = Object.assign(document.createElement("input"), {
+    type: "file",
+    id: "file",
+    className: "hidden",
+  });
+  const labelFile = Object.assign(document.createElement("label"), {
+    innerHTML: "+ Ajouter photo",
+    className: "labelFile",
+  });
   labelFile.setAttribute("for", "file");
-  labelFile.innerHTML = "+ Ajouter photo";
-  const acceptedFormatDescription = document.createElement("p");
-  acceptedFormatDescription.innerHTML = "jpg, png : 4mo max";
+
+  const acceptedFormatDescription = Object.assign(document.createElement("p"), {
+    innerHTML: "jpg, png : 4mo max",
+  });
   const inputTitleLabelContainer = document.createElement("div");
-  const labelTitle = document.createElement("label");
+  const labelTitle = Object.assign(document.createElement("label"), {
+    innerHTML: "Titre",
+  });
   labelTitle.setAttribute("for", "workTitle");
-  labelTitle.innerHTML = "Titre";
-  const inputTitle = document.createElement("input");
-  inputTitle.setAttribute("type", "text");
-  inputTitle.setAttribute("id", "workTitle");
+  const inputTitle = Object.assign(document.createElement("input"), {
+    type: "text",
+    id: "workTitle",
+  });
+
   const inputCategoriesContainer = document.createElement("div");
-  const inputSelect = document.createElement("select");
-  inputSelect.setAttribute("id", "categories");
+  const inputSelect = Object.assign(document.createElement("select"), {
+    id: "categories",
+  });
   // Fetch categories for the dropdown
   const categories = await callCategory();
-  const labelSelect = document.createElement("label");
+  const labelSelect = Object.assign(document.createElement("label"), {
+    innerHTML: "Catégorie",
+  });
   labelSelect.setAttribute("for", "categories");
-  labelSelect.innerHTML = "Catégorie";
-  inputCategoriesContainer.appendChild(labelSelect);
+  append(inputCategoriesContainer, [labelSelect]);
   // Create an empty option for the select
   const emptyOption = document.createElement("option");
-  inputSelect.appendChild(emptyOption);
+  append(inputSelect, [emptyOption]);
   // Populate the select with category options
   categories.forEach((category) => {
-    const optionCategories = document.createElement("option");
-    optionCategories.setAttribute("data-index", category.id);
-    optionCategories.setAttribute("value", `${category.name}`);
-    optionCategories.innerHTML = `${category.name}`;
-    inputSelect.appendChild(optionCategories);
+    const optionCategories = Object.assign(document.createElement("option"), {
+      innerHTML: category.name,
+    });
+    optionCategories.dataset.index = category.id;
+    append(inputSelect, [optionCategories]);
   });
   // Create a container for inputs
-  const containerInputs = document.createElement("div");
-  containerInputs.classList.add("flex", "containerInputs");
+  const containerInputs = Object.assign(document.createElement("div"), {
+    className: "flex containerInputs",
+  });
   // Append elements to the modal
-  inputCategoriesContainer.appendChild(inputSelect);
+  append(inputCategoriesContainer, [inputSelect]);
   append(containerInputFileImage, [
     iconFaImage,
     inputFile,
@@ -111,18 +124,25 @@ function manageInputFileDisplay(containerInputFileImage) {
       reader.onload = (e) => {
         const imageUrl = e.target.result;
         containerInputFileImage.innerHTML = "";
-        const inputFile = document.createElement("input");
-        inputFile.setAttribute("type", "file");
-        inputFile.setAttribute("id", "file");
-        inputFile.classList.add("hidden");
-        const containerImageLabel = document.createElement("div");
-        containerImageLabel.classList.add("containerImageLabel");
-        const imageLoaded = document.createElement("img");
-        imageLoaded.classList.add("imageLoad");
-        imageLoaded.src = imageUrl;
-        const labelImage = document.createElement("label");
+        const inputFile = Object.assign(document.createElement("input"), {
+          type: "file",
+          id: "file",
+          className: "hidden",
+        });
+        const containerImageLabel = Object.assign(
+          document.createElement("div"),
+          {
+            className: "containerImageLabel",
+          }
+        );
+        const imageLoaded = Object.assign(document.createElement("img"), {
+          src: imageUrl,
+          className: "imageLoad",
+        });
+        const labelImage = Object.assign(document.createElement("label"), {
+          className: "label-image",
+        });
         labelImage.setAttribute("for", "file");
-        labelImage.classList.add("label-image");
         append(containerImageLabel, [imageLoaded, labelImage]);
         append(containerInputFileImage, [containerImageLabel, inputFile]);
         manageInputFileDisplay(containerInputFileImage);
@@ -171,8 +191,6 @@ async function handleAddWorkBtn(inputSelect, inputTitle, inputFile) {
     displayAddWorkModal();
   }
   if (response) {
-    console.log(response);
-
     displayAlert("Votre projet a été ajouté avec succès");
     validateModalBtn.removeEventListener("click", addWorkBtnListener);
     clearInputs(inputSelect, inputTitle, inputFile);

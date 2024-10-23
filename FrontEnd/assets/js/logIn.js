@@ -14,6 +14,7 @@ import {
 } from "./script.js";
 
 const homePage = document.querySelector(".home-page");
+const titleContainer = document.getElementById("projects");
 export const body = document.querySelector("body");
 const portfolioTitle = document.querySelector(".portfolio-title h2");
 const loginPage = document.querySelector(".login-container");
@@ -24,7 +25,7 @@ const filters = document.querySelector(".filter");
 const form = document.querySelector(".login");
 
 export function displayLoginPage() {
-  document.querySelector(".logInOut").addEventListener("click", (e) => {
+  logOutBtn.addEventListener("click", (e) => {
     if (e.currentTarget.innerHTML === "logout") return; // Prevent action if already logged out
     manageTransitionAnimation(homePage, loginPage); // Switch to login page
     addClasses([loginHeader, editionBtn, homePage], ["imageApparition"]);
@@ -34,10 +35,9 @@ export function displayLoginPage() {
 }
 
 function manageNavBtnWhenLog() {
-  const AllNavBarBtn = document.querySelectorAll(".anchor");
-  AllNavBarBtn.forEach((btn) =>
-    btn.addEventListener("click", async (event) => {
-      event.preventDefault();
+  document.querySelectorAll(".anchor").forEach((btn) =>
+    btn.addEventListener("click", async (e) => {
+      e.preventDefault();
       if (loginPage.classList.contains("hidden"))
         window.location.href = btn.href;
       if (homePage.classList.contains("hidden")) {
@@ -52,9 +52,9 @@ function formListenerLoginPage() {
   form.removeEventListener("submit", handleFormSubmit); // Ensure only one listener
   form.addEventListener("submit", handleFormSubmit);
   function handleFormSubmit(e) {
+    e.preventDefault();
     const email = document.getElementById("email");
     const password = document.getElementById("passeword");
-    e.preventDefault();
     fetchToken(email, password);
   }
 }
@@ -68,23 +68,23 @@ async function fetchToken(email, password) {
     displayProjectsHomePage(works);
     displayEditorPage();
   } else {
-    displayAlert("L'identifiant ou le mot de passe est incorrect"); // Show error
+    displayAlert("Erreur dans l’identifiant ou le mot de passe"); // Show error
   }
 }
 
 export function displayEditorPage() {
+  portfolioTitle.classList.remove("translateRight");
+  filters.classList.remove("scale");
   removeClasses(
     [editionBtn],
     ["fastDisparition", "hidden", "visibilityHidden"]
   );
-  portfolioTitle.classList.remove("translateRight");
-  filters.classList.remove("scale");
   logOutBtn.removeAttribute("data-logout-attached");
   if (modalContainer.classList.contains("hidden")) {
     switchClass([body], ["translateTop"], ["translateBottom"]);
   }
   filters.classList.add("hidden");
-  document.getElementById("projects").style.marginBottom = "92px";
+  titleContainer.style.marginBottom = "92px";
   logOutBtn.innerHTML = "logout";
   if (!logOutBtn.hasAttribute("data-logout-attached")) {
     logOutBtn.addEventListener("click", async () => {
@@ -99,14 +99,14 @@ export function displayEditorPage() {
 }
 
 async function closeEditorPage() {
-  body.style.marginTop = "-59px";
   localStorage.removeItem("authToken"); // Logout and remove token
+  body.style.marginTop = "-59px";
   switchClass([editionBtn], ["hidden"], ["fastDisparition"]);
   switchClass([body], ["translateBottom"], ["translateTop"]);
   switchClass([filters], ["hidden"], ["scale"]);
   portfolioTitle.classList.add("translateRight");
   logOutBtn.innerHTML = "login";
-  document.getElementById("projects").style.marginBottom = "0px";
+  titleContainer.style.marginBottom = "0px";
   setTimeout(() => {
     editionBtn.classList.add("visibilityHidden");
   }, 200);

@@ -3,45 +3,49 @@ import { manageModalDisplay } from "./modalRemoveWork.js";
 import { displayLoginPage, displayEditorPage } from "./logIn.js";
 import { validateFormContact } from "./formContact.js";
 import { append } from "./utils.js";
-
+const sectionGallery = document.querySelector(".gallery");
+const sectionFilter = document.querySelector(".filter");
 // Fetches all projects and categories
 export const allProjects = await callWorks();
 const allCategory = await callCategory();
 
 // Displays selected projects on the homepage
 export function displayProjectsHomePage(projectsSelected) {
+  sectionGallery.innerHTML = "";
   const token = localStorage.getItem("authToken");
-  if (token) {
-    displayEditorPage();
-  }
-  document.querySelector(".gallery").innerHTML = "";
+  if (token) displayEditorPage();
   projectsSelected.forEach((element) => {
-    const figure = document.createElement("figure");
-    figure.classList.add("imageApparition");
-    const workImage = document.createElement("img");
-    const workTitle = document.createElement("figcaption");
-    workImage.src = element.imageUrl;
-    workTitle.innerHTML = element.title;
+    const figure = Object.assign(document.createElement("figure"), {
+      className: "imageApparition",
+    });
+    const workImage = Object.assign(document.createElement("img"), {
+      src: element.imageUrl,
+    });
+    const workTitle = Object.assign(document.createElement("figcaption"), {
+      innerHTML: element.title,
+    });
     append(figure, [workImage, workTitle]);
-    document.querySelector(".gallery").appendChild(figure);
+    append(sectionGallery, [figure]);
   });
 }
 
 // Creates filter buttons for categories
 export function createFiltersHomePage() {
-  const filters = document.querySelector(".filter");
-  filters.innerHTML = "";
-  const filterAllWorks = document.createElement("button");
-  filterAllWorks.innerHTML = "Tous"; // Filter for all works
-  filterAllWorks.setAttribute("data-index", "all");
-  filterAllWorks.classList.add("button_active");
-  filters.appendChild(filterAllWorks);
+  sectionFilter.innerHTML = "";
+  // Filter for all works
+  const filterAllWorks = Object.assign(document.createElement("button"), {
+    innerHTML: "Tous",
+    className: "button_active",
+  });
+  filterAllWorks.dataset.index = "all";
+  append(sectionFilter, [filterAllWorks]);
   // Create a button for each category
   allCategory.forEach((category) => {
-    const filter = document.createElement("button");
-    filter.innerHTML = category.name;
-    filter.setAttribute("data-index", category.id);
-    document.querySelector(".filter").appendChild(filter);
+    const filter = Object.assign(document.createElement("button"), {
+      innerHTML: category.name,
+    });
+    filter.dataset.index = category.id;
+    append(sectionFilter, [filter]);
   });
 }
 
@@ -56,10 +60,9 @@ export async function clickFilterHomePage(projects) {
       if (id === "all") {
         displayProjectsHomePage(projects);
       } else {
-        const projectsSelected = projects.filter(
-          (project) => project.categoryId === parseInt(id)
+        displayProjectsHomePage(
+          projects.filter((project) => project.categoryId === parseInt(id))
         );
-        displayProjectsHomePage(projectsSelected);
       }
     });
   });
@@ -77,10 +80,10 @@ export function filterBtnClassStatus(AllFilterBtn, filter) {
 
 // Initializes the page with default view and behaviors
 export async function init() {
-  displayLoginPage();
   displayProjectsHomePage(allProjects);
   createFiltersHomePage();
   clickFilterHomePage(allProjects);
+  displayLoginPage();
   manageModalDisplay();
   validateFormContact();
 }
